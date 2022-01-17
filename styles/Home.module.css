@@ -23,34 +23,3 @@
   font-size: 3rem;
   letter-spacing: 0.063rem;
 }
-
-.contact {
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  border: 1px solid rgba(39, 39, 39, 0.1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.avatar {
-  border-radius: 50%;
-}
-
-.info {
-  flex: 1;
-  margin-left: 1rem;
-}
-
-.name {
-  font-size: 2.5rem;
-  margin: 0;
-  line-height: 1;
-}
-
-.email {
-  font-size: 1.5rem;
-  margin: 0;
-  opacity: 0.5;
-}

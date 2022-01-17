@@ -1,11 +1,11 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import React, { useState } from 'react';
 import { Form } from '../components/Form';
 import { prisma } from '../lib/prisma';
 import { Contact } from '@prisma/client';
 
 import styles from '../styles/Home.module.css';
+import { ContactCard } from '../components/ContactCard';
 
 async function saveContact(contact: Contact) {
   const response = await fetch('/api/contact', {
@@ -66,23 +66,7 @@ export default function Home({ initialContacts }) {
       <main className={styles.contacts}>
         <h2 className={styles.heading}>Contacts</h2>
         {contacts.map((c) => (
-          <article key={c.id} className={styles.contact}>
-            <Image
-              src={c.avatar}
-              blurDataURL={c.avatar}
-              alt={`${c.firstName}${c.lastName}`}
-              width={80}
-              height={80}
-              placeholder="blur"
-              className={styles.avatar}
-            />
-            <div className={styles.info}>
-              <p className={styles.name}>
-                {c.firstName} {c.lastName}
-              </p>
-              <p className={styles.email}>{c.email}</p>
-            </div>
-          </article>
+          <ContactCard key={c.id} {...c} />
         ))}
       </main>
     </div>
