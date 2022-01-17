@@ -1,9 +1,30 @@
 import Head from 'next/head';
+import Image from 'next/image';
+import React, { useState } from 'react';
 import { Form } from '../components/Form';
 
 import styles from '../styles/Home.module.css';
 
-export default function Home() {
+export function getStaticProps() {
+  // pass initial contact
+  return {
+    props: {
+      initialContacts: [
+        {
+          id: 1,
+          firstName: 'Ian',
+          lastName: 'De Guzman',
+          email: 'ianbrdeguzman@gmail.com',
+          avatar: 'https://github.com/ianbrdeguzman.png'
+        }
+      ]
+    }
+  };
+}
+
+export default function Home({ initialContacts }) {
+  const [contacts, setContacts] = useState(initialContacts);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -17,6 +38,25 @@ export default function Home() {
       </aside>
       <main className={styles.contacts}>
         <h2 className={styles.heading}>Contacts</h2>
+        {contacts.map((c) => (
+          <article key={c.id} className={styles.contact}>
+            <Image
+              src={c.avatar}
+              blurDataURL={c.avatar}
+              alt={`${c.firstName}${c.lastName}`}
+              width={80}
+              height={80}
+              placeholder="blur"
+              className={styles.avatar}
+            />
+            <div className={styles.info}>
+              <p className={styles.name}>
+                {c.firstName} {c.lastName}
+              </p>
+              <p className={styles.email}>{c.email}</p>
+            </div>
+          </article>
+        ))}
       </main>
     </div>
   );
