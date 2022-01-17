@@ -2,26 +2,21 @@ import Head from 'next/head';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { Form } from '../components/Form';
+import { PrismaClient } from '@prisma/client';
 
 import styles from '../styles/Home.module.css';
+
+const prisma = new PrismaClient();
 
 export interface FormValues {
   [key: string]: string;
 }
 
-export function getStaticProps() {
-  // pass initial contact
+export async function getStaticProps() {
+  const contacts = await prisma.contact.findMany();
   return {
     props: {
-      initialContacts: [
-        {
-          id: 1,
-          firstName: 'Ian',
-          lastName: 'De Guzman',
-          email: 'ianbrdeguzman@gmail.com',
-          avatar: 'https://github.com/ianbrdeguzman.png'
-        }
-      ]
+      initialContacts: contacts
     }
   };
 }
@@ -36,8 +31,6 @@ export default function Home({ initialContacts }) {
     avatar: ''
   });
 
-  console.log(formValues);
-
   return (
     <div className={styles.container}>
       <Head>
@@ -48,7 +41,7 @@ export default function Home({ initialContacts }) {
       <aside className={styles.form}>
         <h2 className={styles.heading}>Add a Contact</h2>
         <Form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
             if (Object.keys(formValues).length === 0) return;
             for (const prop in formValues) {
