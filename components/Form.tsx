@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
-import { FormValues } from '../pages';
+import { Contact } from '@prisma/client';
 import styles from '../styles/components/Form.module.css';
 
 interface FormProps {
   onSubmit: (e: any) => void;
-  formValues: FormValues;
-  setFormValues: Dispatch<SetStateAction<FormValues>>;
+  formValues: Contact;
+  setFormValues: Dispatch<SetStateAction<Contact>>;
 }
 
 export function Form({ onSubmit, formValues, setFormValues }: FormProps) {

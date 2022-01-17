@@ -3,14 +3,24 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { Form } from '../components/Form';
 import { prisma } from '../lib/prisma';
+import { Contact } from '@prisma/client';
 
 import styles from '../styles/Home.module.css';
 
-export interface FormValues {
-  [key: string]: string;
+async function saveContact(contact: Contact) {
+  const response = await fetch('/api/contact', {
+    method: 'POST',
+    body: JSON.stringify(contact)
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  return await response.json();
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const contacts = await prisma.contact.findMany();
   return {
     props: {
@@ -21,7 +31,7 @@ export async function getStaticProps() {
 
 export default function Home({ initialContacts }) {
   const [contacts, setContacts] = useState(initialContacts);
-  const [formValues, setFormValues] = useState<FormValues>({
+  const [formValues, setFormValues] = useState<Contact>({
     id: contacts.length + 1,
     firstName: '',
     lastName: '',
@@ -45,7 +55,9 @@ export default function Home({ initialContacts }) {
             for (const prop in formValues) {
               if (formValues[prop].length === 0) return;
             }
-            setContacts([...contacts, formValues]);
+            const savedContact = await saveContact(formValues);
+            setContacts([...contacts, savedContact]);
+            e.target.reset();
           }}
           formValues={formValues}
           setFormValues={setFormValues}
