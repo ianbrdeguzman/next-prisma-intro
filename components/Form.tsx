@@ -19,7 +19,10 @@ export function Form() {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        if (Object.keys(formValues).length < 4) return;
+        if (Object.keys(formValues).length === 0) return;
+        for (const prop in formValues) {
+          if (formValues[prop] === '') return;
+        }
         alert(JSON.stringify(formValues, null, 2));
       }}
     >
@@ -39,7 +42,7 @@ export function Form() {
       />
       <input
         className={styles.input}
-        type="text"
+        type="email"
         name="email"
         placeholder="Email"
         onChange={handleOnChange}
