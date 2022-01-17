@@ -5,6 +5,10 @@ import { Form } from '../components/Form';
 
 import styles from '../styles/Home.module.css';
 
+export interface FormValues {
+  [key: string]: string;
+}
+
 export function getStaticProps() {
   // pass initial contact
   return {
@@ -24,6 +28,15 @@ export function getStaticProps() {
 
 export default function Home({ initialContacts }) {
   const [contacts, setContacts] = useState(initialContacts);
+  const [formValues, setFormValues] = useState<FormValues>({
+    id: contacts.length + 1,
+    firstName: '',
+    lastName: '',
+    email: '',
+    avatar: ''
+  });
+
+  console.log(formValues);
 
   return (
     <div className={styles.container}>
@@ -34,7 +47,18 @@ export default function Home({ initialContacts }) {
       </Head>
       <aside className={styles.form}>
         <h2 className={styles.heading}>Add a Contact</h2>
-        <Form />
+        <Form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (Object.keys(formValues).length === 0) return;
+            for (const prop in formValues) {
+              if (formValues[prop].length === 0) return;
+            }
+            setContacts([...contacts, formValues]);
+          }}
+          formValues={formValues}
+          setFormValues={setFormValues}
+        />
       </aside>
       <main className={styles.contacts}>
         <h2 className={styles.heading}>Contacts</h2>

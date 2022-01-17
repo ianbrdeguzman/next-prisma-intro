@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
+import { FormValues } from '../pages';
 import styles from '../styles/components/Form.module.css';
 
-interface FormValues {
-  [key: string]: string;
+interface FormProps {
+  onSubmit: (e: any) => void;
+  formValues: FormValues;
+  setFormValues: Dispatch<SetStateAction<FormValues>>;
 }
 
-export function Form() {
-  const [formValues, setFormValues] = useState<FormValues>({});
-
+export function Form({ onSubmit, formValues, setFormValues }: FormProps) {
   const handleOnChange = (e: React.FormEvent<HTMLInputElement>) => {
     setFormValues({
       ...formValues,
@@ -16,27 +17,18 @@ export function Form() {
   };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (Object.keys(formValues).length === 0) return;
-        for (const prop in formValues) {
-          if (formValues[prop] === '') return;
-        }
-        alert(JSON.stringify(formValues, null, 2));
-      }}
-    >
+    <form onSubmit={onSubmit}>
       <input
         className={styles.input}
         type="text"
-        name="first"
+        name="firstName"
         placeholder="First Name"
         onChange={handleOnChange}
       />
       <input
         className={styles.input}
         type="text"
-        name="last"
+        name="lastName"
         placeholder="Last Name"
         onChange={handleOnChange}
       />
